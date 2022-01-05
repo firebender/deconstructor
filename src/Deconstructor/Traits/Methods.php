@@ -132,20 +132,21 @@ trait Methods
      */
     protected function getMethodModifiers(ReflectionMethod $method)
     {
-        $modifiers = $method->getModifiers();
-        $names = Reflection::getModifierNames($modifiers);
-        if (!count($names)) return '';
-        if (count($names) == 1 && Arr::first($names) === 'public') return '<fg=green;options=bold>public</>';
+        $arr = Reflection::getModifierNames($method->getModifiers());
 
-        $names = Arr::where($names, function ($value, $key) {
-            return ($value !== 'public');
-        });
+        $names = implode(' ', $arr);
 
-        if ($names[0] === 'protected') {
-            return '<fg=magenta;options=bold>protected</>';
+        if (in_array('public', $arr)) {
+            $modifiers = "<fg=green;options=bold>$names</>";
+        } elseif (in_array('protected', $arr)) {
+            $modifiers = "<fg=magenta;options=bold>$names</>";
+        } elseif (in_array('private', $arr)) {
+            $modifiers = "<fg=blue;options=bold>$names</>";
+        } else {
+            $modifiers = "<fg=green;options=bold>$names</>";
         }
 
-        return '<fg=blue;options=bold>private</>';
+        return $modifiers;
     }
 
     /**
