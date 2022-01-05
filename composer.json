@@ -1,0 +1,32 @@
+{
+    "name": "firebender/deconstructor",
+    "description": "Deconstructor",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jay Arabia"
+        }
+    ],    
+    "require": {
+        "illuminate/support": "^8.77",
+        "symfony/console": "5.3.10",
+        "symfony/var-dumper": "5.3.10",
+        "wingu/reflection": "^1.1"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "FireBender\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FireBender\\Tests\\": "tests/"
+        }
+    },    
+    "config": {
+        "sort-packages": true
+    }
+}
