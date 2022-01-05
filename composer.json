@@ -10,7 +10,7 @@
     "require": {
         "illuminate/support": "^8.77",
         "symfony/console": "^5.4",
-        "symfony/var-dumper": "5.3.10",
+        "symfony/var-dumper": "^5.4.2",
         "wingu/reflection": "^1.1"
     },
     "autoload": {
