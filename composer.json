@@ -8,7 +8,7 @@
         }
     ],    
     "require": {
-        "illuminate/support": "^8.77",
+        "illuminate/support": "^8.78",
         "symfony/console": "^5.4",
         "symfony/var-dumper": "^5.4.2",
         "wingu/reflection": "^1.1"
