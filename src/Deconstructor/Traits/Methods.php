@@ -160,16 +160,18 @@ trait Methods
 
         if ($returnType->allowsNull()) return ' : null';
 
-        switch ($returnType->getName())
-        {
-            case 'void':
-                return '';
-                break;
-            case 'bool':
-                return ' : bool';
-                break;
-            default:
-                return ' : ' . $returnType->getName();
+        if (method_exists($returnType, 'getName')) {
+            switch ($returnType->getName())
+            {
+                case 'void':
+                    return '';
+                case 'bool':
+                    return ' : bool';
+                default:
+                    return ' : ' . $returnType->getName();
+            }
+        } else {
+            return ' : ' . $returnType->__toString();
         }
 
         return ' ' . $returnType;
