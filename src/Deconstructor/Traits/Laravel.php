@@ -27,6 +27,25 @@ trait Laravel
         dd($providers);
     }
 
+    /**
+     * 
+     */
+    public function bindings($return = false)
+    {
+        if ($this->inLaravel() === false) {
+            $format = 'Cannot call %s if not inside Laravel application';
+            $message = sprintf($format, __METHOD__);
+            throw new Exception($message);
+        }
+
+        $bindings = array_keys(app()->getBindings());
+        sort($bindings);
+
+        if ($return === true) return $bindings;
+
+        dd($bindings);
+    }
+
 	/**
 	 * 
 	 */
