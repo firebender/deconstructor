@@ -53,7 +53,7 @@ trait Laravel
 	{
         if (function_exists('app') === false) return false;
 
-        if (get_class(app()) !== 'Illuminate\Foundation\Application') return false;
+        if (method_exists(app(), 'bind') === false) return false;
 
         return true;
 	}
