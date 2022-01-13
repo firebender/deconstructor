@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FireBender\Deconstructor\Traits;
 
-use ReflectionClass, ReflectionProperty;
+use ReflectionClass, ReflectionFunction, ReflectionProperty;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
