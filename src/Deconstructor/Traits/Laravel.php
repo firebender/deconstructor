@@ -19,6 +19,12 @@ trait Laravel
             throw new Exception($message);
         }
 
+        if (method_exists(app(), 'getLoadedProviders') === false) {
+            $format = "Cannot run %. Method getLoadedProviders() in app() doesn't exist";
+            $message = sprintf($format, __METHOD__);
+            throw new Exception($message);
+        }
+
         $providers = array_keys(app()->getLoadedProviders());
         sort($providers);
 
@@ -34,6 +40,12 @@ trait Laravel
     {
         if ($this->inLaravel() === false) {
             $format = 'Cannot call %s if not inside Laravel application';
+            $message = sprintf($format, __METHOD__);
+            throw new Exception($message);
+        }
+
+        if (method_exists(app(), 'getBindings') === false) {
+            $format = "Cannot run %. Method getBindings() in app() doesn't exist";
             $message = sprintf($format, __METHOD__);
             throw new Exception($message);
         }
