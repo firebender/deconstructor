@@ -11,6 +11,7 @@ use FireBender\Deconstructor\Traits\Interfaces;
 use FireBender\Deconstructor\Traits\Constants;
 use FireBender\Deconstructor\Traits\Properties;
 use FireBender\Deconstructor\Traits\Methods;
+use FireBender\Deconstructor\Traits\Laravel;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -24,6 +25,7 @@ class Deconstructor
 	use Constants;
 	use Properties;
 	use Methods;
+	use Laravel;
 
 	/**
 	 * 
