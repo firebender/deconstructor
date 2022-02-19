@@ -1,9 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-use FireBender\Deconstructor;
+namespace FireBender\Deconstructor\Tests;
+
+use FireBender\Deconstructor\Deconstructor;
 
 class DeconstructorTest extends TestCase
 {
@@ -12,12 +12,30 @@ class DeconstructorTest extends TestCase
 	 */
 	public function passing_null_returns_deconstructor_object()
 	{
-		$actual = d();
-
-		$this->assertIsObject($actual);
+		$deconstructor = d();
+		$this->assertIsObject($deconstructor);
 
 		$expected = Deconstructor::class;
-		$this->assertEquals($expected, get_class($actual));
+		$this->assertEquals($expected, get_class($deconstructor));
+	}
+
+	/**
+	 * @test
+	 */
+	public function deconstructor_has_various_sections()
+	{
+		$deconstructor = d();
+
+		$analysis = d($deconstructor, true);
+
+		$this->assertArrayHasKey('constants', $analysis);
+		$this->assertArrayHasKey('interfaces', $analysis);
+		$this->assertArrayHasKey('io', $analysis);
+		$this->assertArrayHasKey('methods', $analysis);
+		$this->assertArrayHasKey('object', $analysis);
+		$this->assertArrayHasKey('parents', $analysis);
+		$this->assertArrayHasKey('properties', $analysis);
+		$this->assertArrayHasKey('traits', $analysis);
 	}
 
 }

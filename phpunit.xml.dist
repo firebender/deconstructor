@@ -1,17 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         colors="true"
+<phpunit 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    backupGlobals="false"
+    backupStaticAttributes="false"
+    bootstrap="tests/bootstrap.php"
+    cacheResultFile=".phpunit.cache"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    processIsolation="false"
+    stopOnFailure="true"
+    executionOrder="random"
+    failOnWarning="true"
+    failOnRisky="true"
+    failOnEmptyTestSuite="true"
+    beStrictAboutOutputDuringTests="true"
+    verbose="true"
 >
     <testsuites>
-        <testsuite name="Deconstructor">
+        <testsuite name="Deconstructor Test Suite">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+
+    <coverage cacheDirectory="/tmp"
+              processUncoveredFiles="false"
+              pathCoverage="true"
+              disableCodeCoverageIgnore="true"
+        >
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">src</directory>
         </include>
+
+        <report>
+            <html outputDirectory="phpunit/coverage/html"/>
+            <text outputFile="phpunit/coverage/coverage.txt"/>
+            <clover outputFile="phpunit/coverage/clover.xml"/>
+            <cobertura outputFile="phpunit/coverage/cobertura.xml"/>
+            <crap4j outputFile="phpunit/coverage/crap4j.xml" threshold="50"/>
+            <xml outputDirectory="phpunit/coverage/xml"/>
+            <php outputFile="phpunit/coverage/coverage.php"/>
+        </report>
+
     </coverage>
+
+    <logging>
+        <testdoxHtml outputFile="phpunit/logging/html.html"/>
+        <testdoxText outputFile="phpunit/logging/testdox.txt"/>
+        <text outputFile="phpunit/logging/text.txt"/>
+    </logging>
 </phpunit>
