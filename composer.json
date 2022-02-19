@@ -7,26 +7,33 @@
             "name": "Jay Arabia"
         }
     ],    
-    "require": {
-        "illuminate/support": "^8.78",
-        "symfony/console": "^5.4",
-        "symfony/var-dumper": "^5.4.2",
-        "wingu/reflection": "^1.1"
+    "require-dev": {
+        "nunomaduro/larastan": "^2.0",
+        "orchestra/testbench": "^7.0",
+        "phpstan/phpstan": "^1.4"
     },
     "autoload": {
         "files": [
             "src/helpers.php"
         ],
         "psr-4": {
-            "FireBender\\": "src/"
+            "FireBender\\Deconstructor\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "FireBender\\Tests\\": "tests/"
+            "FireBender\\Deconstructor\\Tests\\": "tests/"
         }
-    },    
+    },
+    "scripts": {
+        "phpunit": "vendor/bin/phpunit --no-coverage",
+        "coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit",
+        "phpstan": "phpstan analyse --level 9 ./src ./tests"
+    },
     "config": {
         "sort-packages": true
+    },
+    "require": {
+        "wingu/reflection": "^1.1"
     }
 }
