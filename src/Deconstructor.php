@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace FireBender;
+namespace FireBender\Deconstructor;
 
 use ReflectionObject;
-use FireBender\Deconstructor\Traits\Parents;
-use FireBender\Deconstructor\Traits\Traits;
-use FireBender\Deconstructor\Traits\Interfaces;
-use FireBender\Deconstructor\Traits\Constants;
-use FireBender\Deconstructor\Traits\Properties;
-use FireBender\Deconstructor\Traits\Methods;
-use FireBender\Deconstructor\Traits\Laravel;
+use FireBender\Deconstructor\Concerns\ParentsTrait;
+use FireBender\Deconstructor\Concerns\TraitsTrait;
+use FireBender\Deconstructor\Concerns\InterfacesTrait;
+use FireBender\Deconstructor\Concerns\ConstantsTrait;
+use FireBender\Deconstructor\Concerns\PropertiesTrait;
+use FireBender\Deconstructor\Concerns\MethodsTrait;
+use FireBender\Deconstructor\Concerns\LaravelTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -19,13 +19,13 @@ use Exception;
 
 class Deconstructor
 {
-	use Parents;
-	use Traits;
-	use Interfaces;
-	use Constants;
-	use Properties;
-	use Methods;
-	use Laravel;
+	use ParentsTrait;
+	use TraitsTrait;
+	use InterfacesTrait;
+	use ConstantsTrait;
+	use PropertiesTrait;
+	use MethodsTrait;
+	use LaravelTrait;
 
 	/**
 	 * 
@@ -70,20 +70,20 @@ class Deconstructor
 			];
 		}
 
-		$payload = [
-			'object' => new ReflectionObject($arg),
-			'io' => $this->io,
-			'parents' => $this->parents($arg),
-			'traits' => $this->traits($arg),
-			'interfaces' => $this->interfaces($arg),
-			'constants' => $this->formattedConstants($arg),
-			'properties' => $this->formattedProperties($arg),
-			'methods' => $this->formattedMethods($arg),
-		];
+		// $payload = [
+		// 	'object' => new ReflectionObject($arg),
+		// 	'io' => $this->io,
+		// 	'parents' => $this->parents($arg),
+		// 	'traits' => $this->traits($arg),
+		// 	'interfaces' => $this->interfaces($arg),
+		// 	'constants' => $this->formattedConstants($arg),
+		// 	'properties' => $this->formattedProperties($arg),
+		// 	'methods' => $this->formattedMethods($arg),
+		// ];
 
-		$this->output($payload);
+		// $this->output($payload);
 
-		exit;
+		// exit;
 	}
 
 	/**

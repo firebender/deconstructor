@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace FireBender\Deconstructor\Traits;
+namespace FireBender\Deconstructor\Concerns;
 
 use Illuminate\Support\Arr;
 use ReflectionClass, ReflectionMethod, Reflection;
 
-trait Methods
+trait MethodsTrait
 {
     /**
      * 

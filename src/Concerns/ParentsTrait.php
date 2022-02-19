@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace FireBender\Deconstructor\Traits;
+namespace FireBender\Deconstructor\Concerns;
 
-trait Parents
+trait ParentsTrait
 {
 	/**
 	 * 

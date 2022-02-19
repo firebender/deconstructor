@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace FireBender\Deconstructor\Traits;
+namespace FireBender\Deconstructor\Concerns;
 
 use ReflectionClass;
 
-trait Constants
+trait ConstantsTrait
 {
 	/**
 	 * 

@@ -1,5 +1,7 @@
 <?php
 
+use FireBender\Deconstructor\Deconstructor;
+
 /**
  * If the function d() doens't exist, use that
  *
@@ -12,20 +14,20 @@ if (function_exists('d')) {
 		function get_lambda_deconstructor(mixed $arg = null, bool $return = false)
 		{
 			return function (mixed $arg = null, bool $return = false) {
-				$deconstructor = new \FireBender\Deconstructor();
+				$deconstructor = new Deconstructor();
 				return $deconstructor->deconstruct($arg);
 			};
 		}
 
 	} else {
 		function dx(mixed $arg = null, bool $return = false) {
-			$deconstructor = new \FireBender\Deconstructor();
+			$deconstructor = new Deconstructor();
 			return $deconstructor->deconstruct($arg, $return);
 		}
 	}
 } else {
 	function d(mixed $arg = null, bool $return = false) {
-		$deconstructor = new \FireBender\Deconstructor();
+		$deconstructor = new Deconstructor();
 		return $deconstructor->deconstruct($arg, $return);
 	}
 }

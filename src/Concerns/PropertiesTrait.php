@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace FireBender\Deconstructor\Traits;
+namespace FireBender\Deconstructor\Concerns;
 
 use ReflectionClass, ReflectionFunction, ReflectionProperty;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
-trait Properties
+trait PropertiesTrait
 {
 	/**
 	 * 

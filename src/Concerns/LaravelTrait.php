@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace FireBender\Deconstructor\Traits;
+namespace FireBender\Deconstructor\Concerns;
 
 use Exception;
 
-trait Laravel
+trait LaravelTrait
 {
     /**
      * 

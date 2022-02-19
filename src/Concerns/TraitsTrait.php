@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace FireBender\Deconstructor\Traits;
+namespace FireBender\Deconstructor\Concerns;
 use ReflectionClass;
 
-trait Traits
+trait TraitsTrait
 {
 	/**
 	 * 
