@@ -48,7 +48,7 @@ trait MethodsTrait
 
             $parameters = $magic === true ? '()' : $this->getMethodParameters($method);
 
-            $modifiers = $magic === true ? '' : $this->getMethodModifiers($method);
+            $modifiers = $magic === true ? '' : $this->getStyledMethodModifiers($method);
 
             $returnType = $this->getMethodReturnType($method);
 
@@ -56,7 +56,8 @@ trait MethodsTrait
 
             if (strlen($modifiers)) $entry .= $modifiers . ' ';
 
-            $methods[$name] = $entry . $name . $parameters . $returnType;
+            $styledName = '<fg=#FFD700>' . $name . '</>';
+            $methods[$name] = $entry . $styledName . $parameters . $returnType;
         }
 
         ksort($methods);
@@ -128,23 +129,35 @@ trait MethodsTrait
     }
 
     /**
-     * 
+     * @param \ReflectionMethod $method
+     * @return array<int, string>
      */
-    protected function getMethodModifiers(ReflectionMethod $method)
+    protected function getMethodModifiers(ReflectionMethod $method): array
     {
-        $arr = Reflection::getModifierNames($method->getModifiers());
+        return Reflection::getModifierNames($method->getModifiers());
+    }
 
-        $names = implode(' ', $arr);
+    /**
+     * @param \ReflectionMethod $method
+     * @return string
+     */
+    protected function getStyledMethodModifiers(ReflectionMethod $method): string
+    {
+        $reflected = $this->getMethodModifiers($method);
 
-        if (in_array('public', $arr)) {
-            $modifiers = "<fg=green;options=bold>$names</>";
-        } elseif (in_array('protected', $arr)) {
-            $modifiers = "<fg=magenta;options=bold>$names</>";
-        } elseif (in_array('private', $arr)) {
-            $modifiers = "<fg=blue;options=bold>$names</>";
+        if (in_array('public', $reflected)) {
+            $modifiers = '<fg=green>';
+        } elseif (in_array('protected', $reflected)) {
+            $modifiers = '<fg=magenta>';
+        } elseif (in_array('private', $reflected)) {
+            $modifiers = '<fg=cyan>';
         } else {
-            $modifiers = "<fg=green;options=bold>$names</>";
+            $modifiers = '<fg=green>';
         }
+
+        $modifiers .= implode(' ', $reflected);
+
+        $modifiers .= '</>';
 
         return $modifiers;
     }

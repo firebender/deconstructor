@@ -5,7 +5,7 @@ namespace FireBender\Deconstructor\Tests;
 
 use FireBender\Deconstructor\Deconstructor;
 
-class DeconstructorException extends TestCase
+class DeconstructorExceptionTest extends TestCase
 {
 	/**
 	 * @test
