@@ -5,6 +5,7 @@
 .env
 .phpunit.cache
 auth.json
+phpstan.neon
 phpunit.xml
 studio.json
 testbench.yaml

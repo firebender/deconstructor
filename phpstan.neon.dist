@@ -1,9 +1,10 @@
 includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/nunomaduro/larastan/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
-    - vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
     noUnnecessaryCollectionCall: false
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Dynamic call to static method PHPUnit\\Framework\\.*#'
 
