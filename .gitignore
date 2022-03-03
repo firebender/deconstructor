@@ -6,4 +6,5 @@
 .phpunit.cache
 auth.json
 phpunit.xml
+studio.json
 testbench.yaml

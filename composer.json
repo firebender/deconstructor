@@ -39,15 +39,5 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../core"
-        },
-        {
-            "type": "composer",
-            "url": "https://complyant.repo.repman.io"
-        }
-    ]
+    "prefer-stable": true
 }
