@@ -73,7 +73,9 @@ trait PropertiesTrait
      */
     protected function stringifyClosureInArray(mixed $array): array
     {
+        if (is_null($array) === true) return [];
         assert(is_array($array));
+
         foreach ($array as $k => $v)
         {
             assert($v instanceof Closure);
@@ -174,8 +176,8 @@ trait PropertiesTrait
                 $default .= ' = ' . $value;
             }
 
-            $styledName = '<fg=#EEED09>' . $name . '</>';
-            $properties[$name] = $modifier . $type . '$' . $styledName . $default;
+            $styledName = '<fg=#EEED09>$' . $name . '</>';
+            $properties[$name] = $modifier . $type . $styledName . $default;
         }
 
         ksort($properties);
