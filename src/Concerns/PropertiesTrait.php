@@ -73,11 +73,7 @@ trait PropertiesTrait
      */
     protected function stringifyClosureInArray(mixed $array): array
     {
-        if (is_null($array) === true) return [];
-
-        if (is_string($array) === true) return [];
-
-        assert(is_array($array));
+        if (is_array($array) === false) return [];
 
         foreach ($array as $k => $v)
         {
