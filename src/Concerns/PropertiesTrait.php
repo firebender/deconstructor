@@ -75,8 +75,6 @@ trait PropertiesTrait
     {
         if (is_array($array) === false) return [];
 
-        assert(is_array($array));
-
         foreach ($array as $k => $v)
         {
             assert($v instanceof Closure);
