@@ -1,4 +1,4 @@
-name: deconstructor tests
+name: Tests
 
 on:
     push:
