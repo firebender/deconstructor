@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
 
 jobs:
-    pre_job:
+    skip_if_done:
         # continue-on-error: true # Uncomment once integration is finished
         runs-on: ubuntu-latest
     
@@ -24,8 +24,8 @@ jobs:
                 # do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
 
     main:
-        needs: pre_job
-        if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+        needs: skip_if_done
+        if: ${{ needs.skip_if_done.outputs.should_skip != 'true' }}
         runs-on: ubuntu-latest
         strategy:
             matrix:
