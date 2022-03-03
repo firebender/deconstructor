@@ -30,7 +30,7 @@ class Deconstructor
 	/**
 	 * 
 	 */
-	protected $io;
+	public $io;
 
 	/**
 	 * 
@@ -70,20 +70,20 @@ class Deconstructor
 			];
 		}
 
-		// $payload = [
-		// 	'object' => new ReflectionObject($arg),
-		// 	'io' => $this->io,
-		// 	'parents' => $this->parents($arg),
-		// 	'traits' => $this->traits($arg),
-		// 	'interfaces' => $this->interfaces($arg),
-		// 	'constants' => $this->formattedConstants($arg),
-		// 	'properties' => $this->formattedProperties($arg),
-		// 	'methods' => $this->formattedMethods($arg),
-		// ];
+		$payload = [
+			'object' => new ReflectionObject($arg),
+			'io' => $this->io,
+			'parents' => $this->parents($arg),
+			'traits' => $this->traits($arg),
+			'interfaces' => $this->interfaces($arg),
+			'constants' => $this->formattedConstants($arg),
+			'properties' => $this->formattedProperties($arg),
+			'methods' => $this->formattedMethods($arg),
+		];
 
-		// $this->output($payload);
+		$this->output($payload);
 
-		// exit;
+		exit(1);
 	}
 
 	/**

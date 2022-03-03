@@ -1,4 +1,9 @@
 /phpunit
+/tests
+/tests-deconstructor
 /vendor
 .env
 .phpunit.cache
+auth.json
+phpunit.xml
+testbench.yaml

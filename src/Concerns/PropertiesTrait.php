@@ -158,11 +158,11 @@ trait PropertiesTrait
             if ($property->hasDefaultValue()) {
                 $value = $property->getDefaultValue();
                 $value = $this->getDump($value);
-                $value .= ' = ' . $value;
                 $default .= ' = ' . $value;
             }
 
-            $properties[$name] = $modifier . $type . '$' . $name . $default;
+            $styledName = '<fg=#EEED09>' . $name . '</>';
+            $properties[$name] = $modifier . $type . '$' . $styledName . $default;
         }
 
         ksort($properties);
