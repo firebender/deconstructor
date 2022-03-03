@@ -1,4 +1,6 @@
 includes:
-    - vendor/nunomaduro/larastan/extension.neon
 parameters:
     noUnnecessaryCollectionCall: false
+    ignoreErrors:
+        - '#Dynamic call to static method PHPUnit\\Framework\\.*#'
+

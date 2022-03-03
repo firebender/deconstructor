@@ -9,9 +9,9 @@ use Exception;
 trait LaravelTrait
 {
     /**
-     * 
+     * @return array<int, string>
      */
-    public function providers($return = false)
+    public function providers(bool $return = false): array
     {
         if ($this->inLaravel() === false) {
             $format = 'Cannot call %s if not inside Laravel application';
@@ -19,13 +19,14 @@ trait LaravelTrait
             throw new Exception($message);
         }
 
-        if (method_exists(app(), 'getLoadedProviders') === false) {
-            $format = "Cannot run %. Method getLoadedProviders() in app() doesn't exist";
+        try {
+            $providers = array_keys(app()->getLoadedProviders());
+        } catch(Exception $e) {
+            $format = "Cannot run app()->getLoadedProviders() in %s";
             $message = sprintf($format, __METHOD__);
             throw new Exception($message);
         }
 
-        $providers = array_keys(app()->getLoadedProviders());
         sort($providers);
 
         if ($return === true) return $providers;
@@ -34,9 +35,9 @@ trait LaravelTrait
     }
 
     /**
-     * 
+     * @return array<int, string>
      */
-    public function bindings($return = false)
+    public function bindings(bool $return = false): array
     {
         if ($this->inLaravel() === false) {
             $format = 'Cannot call %s if not inside Laravel application';
@@ -44,13 +45,14 @@ trait LaravelTrait
             throw new Exception($message);
         }
 
-        if (method_exists(app(), 'getBindings') === false) {
-            $format = "Cannot run %. Method getBindings() in app() doesn't exist";
+        try {
+            $bindings = array_keys(app()->getBindings());
+        } catch(Exception $e) {
+            $format = "Cannot run app()->getBindings() in %s";
             $message = sprintf($format, __METHOD__);
             throw new Exception($message);
         }
 
-        $bindings = array_keys(app()->getBindings());
         sort($bindings);
 
         if ($return === true) return $bindings;
@@ -61,11 +63,9 @@ trait LaravelTrait
 	/**
 	 * 
 	 */
-	protected function inLaravel()
+	protected function inLaravel(): bool
 	{
         if (function_exists('app') === false) return false;
-
-        if (method_exists(app(), 'bind') === false) return false;
 
         return true;
 	}

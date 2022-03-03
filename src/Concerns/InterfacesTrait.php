@@ -9,15 +9,15 @@ use ReflectionClass;
 trait InterfacesTrait
 {
 	/**
-	 * 
+	 * @return array<int, mixed>
 	 */
-	public function interfaces(Object $object)
+	public function interfaces(Object $object): array
 	{
         $class = new ReflectionClass($object);
 
         $arr = $class->getInterfaces();
 
-        if (!count($arr)) return [];
+        if (count($arr) === 0) return [];
 
         $interfaces = [];
 

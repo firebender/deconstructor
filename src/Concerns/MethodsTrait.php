@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace FireBender\Deconstructor\Concerns;
 
 use Illuminate\Support\Arr;
-use ReflectionClass, ReflectionMethod, Reflection;
+use ReflectionClass, ReflectionMethod, ReflectionType, Reflection;
 
 trait MethodsTrait
 {
     /**
-     * 
+     * @var array<int, string>
      */
     protected $magic = [
         '__destruct', '__call', '__callStatic', '__get', '__set', '__isset', '__unset', '__sleep', '__wakeup',
@@ -18,29 +18,30 @@ trait MethodsTrait
     ];
 
 	/**
-	 * 
+	 * @return array<int, mixed>
 	 */
-	public function methods(Object $object)
+	public function methods(object $object): array
 	{
         $class = new ReflectionClass($object);
 
         $arr = $class->getMethods();
 
-        if (!count($arr)) return [];
+        if (count($arr) === 0) return [];
 
         return $arr;		
 	}
 
 	/**
-	 * 
+	 * @return array<int|string, string>
 	 */
-	protected function formattedMethods(Object $object)
+	protected function formattedMethods(object $object): array
 	{
         $arr = $this->methods($object);
 
         $methods = [];
 
         foreach ($arr as $method) {
+            assert($method instanceof ReflectionMethod);
 
             $name = $method->name;
 
@@ -54,7 +55,7 @@ trait MethodsTrait
 
             $entry = '';
 
-            if (strlen($modifiers)) $entry .= $modifiers . ' ';
+            if (strlen($modifiers) > 0) $entry .= $modifiers . ' ';
 
             $styledName = '<fg=#FFD700>' . $name . '</>';
             $methods[$name] = $entry . $styledName . $parameters . $returnType;
@@ -68,9 +69,9 @@ trait MethodsTrait
     /**
      * 
      */
-    protected function isMagicMethod($name)
+    protected function isMagicMethod(string $name): bool
     {
-        if (substr($name, 0, 2) === '__' && in_array($name, $this->magic)) return true;
+        if (substr($name, 0, 2) === '__' && in_array($name, $this->magic, true)) return true;
 
         return false;
     }
@@ -78,10 +79,10 @@ trait MethodsTrait
     /**
      * 
      */
-    protected function getMethodParameters(ReflectionMethod $method)
+    protected function getMethodParameters(ReflectionMethod $method): string
     {
         $parameters = $method->getParameters();
-        if (!count($parameters)) return '()';
+        if (count($parameters) === 0) return '()';
 
         $arr = [];          
         foreach ($parameters as $parameter)
@@ -91,6 +92,7 @@ trait MethodsTrait
             if ($parameter->hasType())
             {
                 $type = $parameter->getType();
+                assert($type instanceof ReflectionType);
 
                 if (method_exists($type, 'getName')) {
                     $tmp[] = $type->getName();
@@ -145,11 +147,11 @@ trait MethodsTrait
     {
         $reflected = $this->getMethodModifiers($method);
 
-        if (in_array('public', $reflected)) {
+        if (in_array('public', $reflected, true)) {
             $modifiers = '<fg=green>';
-        } elseif (in_array('protected', $reflected)) {
+        } elseif (in_array('protected', $reflected, true)) {
             $modifiers = '<fg=magenta>';
-        } elseif (in_array('private', $reflected)) {
+        } elseif (in_array('private', $reflected, true)) {
             $modifiers = '<fg=cyan>';
         } else {
             $modifiers = '<fg=green>';
@@ -163,13 +165,14 @@ trait MethodsTrait
     }
 
     /**
-     * 
+     * @return string
      */
     protected function getMethodReturnType(ReflectionMethod $method)
     {
-        if (!$method->hasReturnType()) return '';
+        if ($method->hasReturnType() === false) return '';
 
         $returnType = $method->getReturnType();
+        if ($returnType instanceof ReflectionType === false) return '';
 
         if ($returnType->allowsNull()) return ' : null';
 
@@ -187,7 +190,7 @@ trait MethodsTrait
             return ' : ' . $returnType->__toString();
         }
 
-        return ' ' . $returnType;
+        // return ' ' . $returnType;
     }
 
 
