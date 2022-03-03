@@ -154,10 +154,13 @@ trait PropertiesTrait
             $property->setAccessible(true);
 
             $default = '';
-            $value = $property->getValue($object);
 
-            $value = $this->getDump($value);
-            $default .= ' = ' . $value;
+            if ($property->hasDefaultValue()) {
+                $value = $property->getDefaultValue();
+                $value = $this->getDump($value);
+                $value .= ' = ' . $value;
+                $default .= ' = ' . $value;
+            }
 
             $properties[$name] = $modifier . $type . '$' . $name . $default;
         }
