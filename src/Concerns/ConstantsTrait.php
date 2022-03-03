@@ -9,9 +9,9 @@ use ReflectionClass;
 trait ConstantsTrait
 {
 	/**
-	 * 
+	 * @return array<string, mixed>
 	 */
-	public function constants(Object $object)
+	public function constants(object $object): array
 	{
         $class = new ReflectionClass($object);
 
@@ -22,23 +22,29 @@ trait ConstantsTrait
 	}
 
     /**
-     * 
+     * @return array<int, mixed>
      */
-    protected function formattedConstants(Object $object)
+    protected function formattedConstants(object $object): array
     {
         $constants = $this->constants($object);
 
         $display = [];
-        foreach ($constants as $key => $entry) {
-            if (is_array($entry)) {
+        foreach ($constants as $key => $item) {
+            $entry = '';
+            if (is_array($item)) {
                 $s = "[" . PHP_EOL;
-                foreach ($entry as $k => $v) {
+                foreach ($item as $k => $v) {
                     $s .= "$k => $v" . PHP_EOL;
                 }
                 $s .= "]" . PHP_EOL;
                 $entry = $s;
-            }            
-            $display[] = "<fg=blue;options=bold>$key</> => $entry";
+            } else if (is_string($item)) {
+                $entry = $item;
+            }
+
+            $format = '<fg=blue;options=bold>%s</> => %s';
+            $entry = sprintf($format, $key, $entry);
+            $display[] = $entry;
         }
 
         return $display;

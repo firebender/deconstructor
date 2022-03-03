@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace FireBender\Deconstructor\Concerns;
 
-use ReflectionClass, ReflectionFunction, ReflectionProperty;
+use ReflectionClass, ReflectionFunction, ReflectionProperty, ReflectionType, ReflectionParameter;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Closure;
 
 trait PropertiesTrait
 {
 	/**
-	 * 
+	 * @return array<int, mixed>
 	 */
-	public function properties(Object $object)
+	public function properties(Object $object): array
 	{
         $class = new ReflectionClass($object);
 
@@ -21,15 +22,16 @@ trait PropertiesTrait
 	}
 
     /**
-     * 
+     * @param mixed $value
+     * @return string|null
      */
-    protected function getDump($value)
+    protected function getDump(mixed $value): string|null
     {
-        $type = gettype($value);
+        if (is_object($value) === true) {
+            return get_class($value);
+        }
 
-        if ($type === 'object') return get_class($value);
-
-        if ($type === 'array') $value = self::stringifyClosureInArray($value);
+        $value = self::stringifyClosureInArray($value);
 
         $cloner = new VarCloner();
         $dumper = new CliDumper();
@@ -38,18 +40,26 @@ trait PropertiesTrait
 
         $output = $dumper->dump($data, true);
 
-        $output = str_replace(PHP_EOL, '', $output);
+        if ($output !== null) {
+            $output = str_replace(PHP_EOL, '', $output);
+        }
 
-        // remove array:\d+
-        $pattern = '|array:\d+\s|';
-        $output = preg_replace($pattern, '', $output);
+        if ($output !== null) {
+            // remove array:\d+
+            $pattern = '|array:\d+\s|';
+            $output = preg_replace($pattern, '', $output);
+        }
 
-        // remove extra space after []
-        $pattern = '|\[\s+|';
-        $output = preg_replace($pattern, '[', $output);
+        if ($output !== null) {
+            // remove extra space after []
+            $pattern = '|\[\s+|';
+            $output = preg_replace($pattern, '[', $output);
+        }
 
-        $pattern = '|\s{2}|';
-        $output = preg_replace($pattern, ', ', $output);
+        if ($output !== null) {
+            $pattern = '|\s{2}|';
+            $output = preg_replace($pattern, ', ', $output);
+        }
 
         return $output;
     }
@@ -57,50 +67,51 @@ trait PropertiesTrait
     /**
      * Closures in arrays return too much info
      * Turn closures into string before passing to symfony/var-dumper
+     *
+     * @param mixed $array
+     * @return array<int, string>
      */
-    protected function stringifyClosureInArray($array)
+    protected function stringifyClosureInArray(mixed $array): array
     {
+        assert(is_array($array));
         foreach ($array as $k => $v)
         {
-            if (is_object($v))
+            assert($v instanceof Closure);
+
+            $arr = [];
+            $function = new ReflectionFunction($v);
+            $params = $function->getParameters();
+            foreach ($params as $param)
             {
-                $class = new ReflectionClass($v);
-                $name = $class->getName();
-                if ($name === 'Closure')
+                $entry = '';
+
+                if ($param->hasType())
                 {
-                    $arr = [];
-                    $function = new ReflectionFunction($v);
-                    $params = $function->getParameters();
-                    foreach ($params as $param)
-                    {
-                        $entry = '';
-
-                        if ($param->hasType())
-                        {
-                            $type = $param->getType();
-                            $entry .= $type->getName() . ' ';
-                        }
-
-                        $entry .= $param->getName();
-
-                        if ($param->isDefaultValueAvailable())
-                        {
-                            if ($param->isDefaultValueConstant())
-                            {
-                                $entry .= ' = ' . $param->getDefaultValueConstantName();
-                                continue;
-                            }
-
-                            $defaultValue = $param->getDefaultValue();
-                            $dumped = self::getDump($defaultValue);
-                            $entry .= ' = ' . $dumped;
-                        }
-
-                        $arr[] = $entry;
-
-                        $array[$k] = 'Closure (' . implode(', ', $arr) . ')';
-                    }
+                    $type = $param->getType();
+                    assert($type instanceof ReflectionType);
+                    assert(method_exists($type, 'getName'));
+                    $entry .= $type->getName() . ' ';
                 }
+
+                $entry .= $param->getName();
+
+                if ($param->isDefaultValueAvailable())
+                {
+                    if ($param->isDefaultValueConstant())
+                    {
+                        $entry .= ' = ' . $param->getDefaultValueConstantName();
+                        continue;
+                    }
+
+                    $defaultValue = $param->getDefaultValue();
+
+                    $dumped = self::getDump($defaultValue);
+                    $entry .= ' = ' . $dumped;
+                }
+
+                $arr[] = $entry;
+
+                $array[$k] = 'Closure (' . implode(', ', $arr) . ')';
             }
         }
 
@@ -110,7 +121,7 @@ trait PropertiesTrait
     /**
      * 
      */
-    protected function getPropertyModifiers(ReflectionProperty $property)
+    protected function getPropertyModifiers(ReflectionProperty $property): string
     {
             $modifier = '';
 
@@ -128,9 +139,9 @@ trait PropertiesTrait
     }
 
     /**
-     * 
+     * @return array<int|string, string>
      */
-    protected function formattedProperties(Object $object)
+    protected function formattedProperties(object $object): array
     {
         $properties = [];
 
@@ -138,9 +149,11 @@ trait PropertiesTrait
 
         foreach ($arr as $property)
         {
+            assert($property instanceof ReflectionProperty);
+            
             $name = $property->getName();
 
-            if ($name === 'macros') $this->flag = true;
+            // if ($name === 'macros') $this->flag = true;
 
             $modifier = $this->getPropertyModifiers($property);
 

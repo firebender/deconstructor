@@ -10,7 +10,7 @@ class DeconstructorExceptionTest extends TestCase
 	/**
 	 * @test
 	 */
-	public function passing_non_object_throws_exception()
+	public function passing_non_object_throws_exception(): void
 	{
 		$array = [
 			'apple' => 1,

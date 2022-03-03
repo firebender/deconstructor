@@ -63,6 +63,9 @@ jobs:
                 max_attempts: 5
                 command: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
+            - name: PHPStan Level 9
+              run: vendor/bin/phpstan analyze ./src ./tests --level=9
+
             - name: Execute tests
               run: vendor/bin/phpunit --verbose
               env:

@@ -11,7 +11,10 @@ use FireBender\Deconstructor\Deconstructor;
  */
 if (function_exists('d')) {
 	if (function_exists('dx')) {
-		function get_lambda_deconstructor(mixed $arg = null, bool $return = false)
+		/**
+		 * 
+		 */
+		function get_lambda_deconstructor(mixed $arg = null, bool $return = false): Closure
 		{
 			return function (mixed $arg = null, bool $return = false) {
 				$deconstructor = new Deconstructor();
@@ -20,13 +23,19 @@ if (function_exists('d')) {
 		}
 
 	} else {
-		function dx(mixed $arg = null, bool $return = false) {
+		/**
+		 * @return array<string, mixed>|Deconstructor
+		 */
+		function dx(mixed $arg = null, bool $return = false): array|Deconstructor {
 			$deconstructor = new Deconstructor();
 			return $deconstructor->deconstruct($arg, $return);
 		}
 	}
 } else {
-	function d(mixed $arg = null, bool $return = false) {
+	/**
+	 * @return array<string, mixed>|Deconstructor
+	 */
+	function d(mixed $arg = null, bool $return = false): array|Deconstructor {
 		$deconstructor = new Deconstructor();
 		return $deconstructor->deconstruct($arg, $return);
 	}

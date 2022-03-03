@@ -28,7 +28,7 @@ class Deconstructor
 	use LaravelTrait;
 
 	/**
-	 * 
+	 * @var SymfonyStyle
 	 */
 	public $io;
 
@@ -45,9 +45,9 @@ class Deconstructor
 	}
 
 	/**
-	 * 
+	 * @return array<string, mixed>|self
 	 */
-	public function deconstruct(mixed $arg = null, bool $return = false)
+	public function deconstruct(mixed $arg = null, bool $return = false): array|self
 	{
 		if ($arg === null) {
 			return $this;
@@ -87,31 +87,51 @@ class Deconstructor
 	}
 
 	/**
-	 * 
+	 * @param array<string, mixed> $payload
 	 */
-	protected function output(Array $payload)
+	protected function output(array $payload): void
 	{
-		extract($payload);
+		$object = $payload['object'] ?? null;
+		$parents = $payload['parents'] ?? null;
+		$traits = $payload['traits'] ?? null;
+		$interfaces = $payload['interfaces'] ?? null;
+		$constants = $payload['constants'] ?? null;
+		$properties = $payload['properties'] ?? null;
+		$methods = $payload['methods'] ?? null;
 
-		$this->io->title($object->name);
+		if ($object instanceof ReflectionObject) {
+			$this->io->title($object->name);
+		}
 
-		$this->io->section('Parents');
-		$this->io->listing($parents);
+		if (is_array($parents) === true) {
+			$this->io->section('Parents');
+			$this->io->listing($parents);
+		}
 
-		$this->io->section('Traits');
-		$this->io->listing($traits);
+		if (is_array($traits) === true) {
+			$this->io->section('Traits');
+			$this->io->listing($traits);
+		}
 
-		$this->io->section('Interfaces');
-		$this->io->listing($interfaces);
+		if (is_array($interfaces) === true) {
+			$this->io->section('Interfaces');
+			$this->io->listing($interfaces);
+		}
 
-		$this->io->section('Constants');
-		$this->io->listing($constants);
+		if (is_array($constants) === true) {
+			$this->io->section('Constants');
+			$this->io->listing($constants);
+		}
 
-		$this->io->section('Properties');
-		$this->io->listing($properties);
+		if (is_array($properties) === true) {
+			$this->io->section('Properties');
+			$this->io->listing($properties);
+		}
 
-		$this->io->section('Methods');
-		$this->io->listing($methods);
+		if (is_array($methods) === true) {
+			$this->io->section('Methods');
+			$this->io->listing($methods);
+		}
 	}
 
 }
