@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FireBender\Deconstructor\Concerns;
 
+use Illuminate\Config\Repository;
 use Exception;
 
 trait LaravelTrait
@@ -59,11 +60,16 @@ trait LaravelTrait
     {
         $this->inLaravel(__METHOD__);
 
-        $all = config()->all();
+        $config = config();
+        assert($config instanceof Repository);
+
+        $all = $config->all();
         $keys = array_keys($all);
         sort($keys);
 
-        return $keys;
+        if ($return === true) return $keys;
+
+        dd($keys);
     }
 
 	/**
