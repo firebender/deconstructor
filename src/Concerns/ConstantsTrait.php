@@ -8,18 +8,18 @@ use ReflectionClass;
 
 trait ConstantsTrait
 {
-	/**
-	 * @return array<string, mixed>
-	 */
-	public function constants(object $object): array
-	{
+    /**
+     * @return array<string, mixed>
+     */
+    public function constants(object $object): array
+    {
         $class = new ReflectionClass($object);
 
         $constants = $class->getConstants();
         ksort($constants);
 
         return $constants;
-	}
+    }
 
     /**
      * @return array<int, mixed>
@@ -32,13 +32,13 @@ trait ConstantsTrait
         foreach ($constants as $key => $item) {
             $entry = '';
             if (is_array($item)) {
-                $s = "[" . PHP_EOL;
+                $s = '['.PHP_EOL;
                 foreach ($item as $k => $v) {
-                    $s .= "$k => $v" . PHP_EOL;
+                    $s .= "$k => $v".PHP_EOL;
                 }
-                $s .= "]" . PHP_EOL;
+                $s .= ']'.PHP_EOL;
                 $entry = $s;
-            } else if (is_string($item)) {
+            } elseif (is_string($item)) {
                 $entry = $item;
             }
 
@@ -49,5 +49,4 @@ trait ConstantsTrait
 
         return $display;
     }
-
 }

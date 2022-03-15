@@ -8,16 +8,18 @@ use ReflectionClass;
 
 trait InterfacesTrait
 {
-	/**
-	 * @return array<int, mixed>
-	 */
-	public function interfaces(Object $object): array
-	{
+    /**
+     * @return array<int, mixed>
+     */
+    public function interfaces(object $object): array
+    {
         $class = new ReflectionClass($object);
 
         $arr = $class->getInterfaces();
 
-        if (count($arr) === 0) return [];
+        if (count($arr) === 0) {
+            return [];
+        }
 
         $interfaces = [];
 
@@ -27,6 +29,6 @@ trait InterfacesTrait
 
         sort($interfaces);
 
-        return $interfaces;		
-	}
+        return $interfaces;
+    }
 }

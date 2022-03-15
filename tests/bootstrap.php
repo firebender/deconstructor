@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require realpath(__DIR__ . '/../vendor/autoload.php');
+require realpath(__DIR__.'/../vendor/autoload.php');
 
 use Illuminate\Filesystem\Filesystem;
 
@@ -19,7 +19,7 @@ if ($limit < 1073741824) {
 /**
  * We create a phpunit directory in the package root if it doesn't exist.
  */
-$dir = getcwd() . '/phpunit';
+$dir = getcwd().'/phpunit';
 
 $files = new Filesystem();
 if ($files->exists($dir)) {

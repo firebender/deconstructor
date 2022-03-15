@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace FireBender\Deconstructor\Concerns;
 
-use Illuminate\Support\Arr;
-use ReflectionClass, ReflectionMethod, ReflectionType, Reflection;
+use Reflection;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionType;
 
 trait MethodsTrait
 {
@@ -14,28 +16,30 @@ trait MethodsTrait
      */
     protected $magic = [
         '__destruct', '__call', '__callStatic', '__get', '__set', '__isset', '__unset', '__sleep', '__wakeup',
-        '__serialize', '__unserialize', '__toString', '__invoke', '__setState', '__clone', '__debugInfo'
+        '__serialize', '__unserialize', '__toString', '__invoke', '__setState', '__clone', '__debugInfo',
     ];
 
-	/**
-	 * @return array<int, mixed>
-	 */
-	public function methods(object $object): array
-	{
+    /**
+     * @return array<int, mixed>
+     */
+    public function methods(object $object): array
+    {
         $class = new ReflectionClass($object);
 
         $arr = $class->getMethods();
 
-        if (count($arr) === 0) return [];
+        if (count($arr) === 0) {
+            return [];
+        }
 
-        return $arr;		
-	}
+        return $arr;
+    }
 
-	/**
-	 * @return array<int|string, string>
-	 */
-	protected function formattedMethods(object $object): array
-	{
+    /**
+     * @return array<int|string, string>
+     */
+    protected function formattedMethods(object $object): array
+    {
         $arr = $this->methods($object);
 
         $methods = [];
@@ -55,42 +59,40 @@ trait MethodsTrait
 
             $entry = '';
 
-            if (strlen($modifiers) > 0) $entry .= $modifiers . ' ';
+            if (strlen($modifiers) > 0) {
+                $entry .= $modifiers.' ';
+            }
 
-            $styledName = '<fg=#FFD700>' . $name . '</>';
-            $methods[$name] = $entry . $styledName . $parameters . $returnType;
+            $styledName = '<fg=#FFD700>'.$name.'</>';
+            $methods[$name] = $entry.$styledName.$parameters.$returnType;
         }
 
         ksort($methods);
 
         return $methods;
-	}
+    }
 
-    /**
-     * 
-     */
     protected function isMagicMethod(string $name): bool
     {
-        if (substr($name, 0, 2) === '__' && in_array($name, $this->magic, true)) return true;
+        if (substr($name, 0, 2) === '__' && in_array($name, $this->magic, true)) {
+            return true;
+        }
 
         return false;
     }
 
-    /**
-     * 
-     */
     protected function getMethodParameters(ReflectionMethod $method): string
     {
         $parameters = $method->getParameters();
-        if (count($parameters) === 0) return '()';
+        if (count($parameters) === 0) {
+            return '()';
+        }
 
-        $arr = [];          
-        foreach ($parameters as $parameter)
-        {
+        $arr = [];
+        foreach ($parameters as $parameter) {
             $tmp = [];
 
-            if ($parameter->hasType())
-            {
+            if ($parameter->hasType()) {
                 $type = $parameter->getType();
                 assert($type instanceof ReflectionType);
 
@@ -99,26 +101,21 @@ trait MethodsTrait
                 } elseif (property_exists($type, 'name')) {
                     $tmp[] = $type->name;
                 }
-
             }
 
             $name = $parameter->getName();
-            $tmp[] = '$' . $name;
+            $tmp[] = '$'.$name;
 
-            if ($parameter->isDefaultValueAvailable())
-            {
-                if ($parameter->isDefaultValueConstant())
-                {
-                    $tmp[] = ' = ' . $parameter->getDefaultValueConstantName();
+            if ($parameter->isDefaultValueAvailable()) {
+                if ($parameter->isDefaultValueConstant()) {
+                    $tmp[] = ' = '.$parameter->getDefaultValueConstantName();
                     continue;
                 }
 
                 $defaultValue = $parameter->getDefaultValue();
 
-                if ($parameter->isVariadic())
-                {
-                    $defaultValue = '...' . $defaultValue;
-
+                if ($parameter->isVariadic()) {
+                    $defaultValue = '...'.$defaultValue;
                 }
 
                 $defaultValue = $this->getDump($defaultValue);
@@ -127,11 +124,12 @@ trait MethodsTrait
             $arr[] = implode(' ', $tmp);
         }
 
-        return '(' . implode(', ', $arr) . ')';
+        return '('.implode(', ', $arr).')';
     }
 
     /**
      * @param \ReflectionMethod $method
+     *
      * @return array<int, string>
      */
     protected function getMethodModifiers(ReflectionMethod $method): array
@@ -141,6 +139,7 @@ trait MethodsTrait
 
     /**
      * @param \ReflectionMethod $method
+     *
      * @return string
      */
     protected function getStyledMethodModifiers(ReflectionMethod $method): string
@@ -169,29 +168,32 @@ trait MethodsTrait
      */
     protected function getMethodReturnType(ReflectionMethod $method)
     {
-        if ($method->hasReturnType() === false) return '';
+        if ($method->hasReturnType() === false) {
+            return '';
+        }
 
         $returnType = $method->getReturnType();
-        if ($returnType instanceof ReflectionType === false) return '';
+        if ($returnType instanceof ReflectionType === false) {
+            return '';
+        }
 
-        if ($returnType->allowsNull()) return ' : null';
+        if ($returnType->allowsNull()) {
+            return ' : null';
+        }
 
         if (method_exists($returnType, 'getName')) {
-            switch ($returnType->getName())
-            {
+            switch ($returnType->getName()) {
                 case 'void':
                     return '';
                 case 'bool':
                     return ' : bool';
                 default:
-                    return ' : ' . $returnType->getName();
+                    return ' : '.$returnType->getName();
             }
         } else {
-            return ' : ' . $returnType->__toString();
+            return ' : '.$returnType->__toString();
         }
 
         // return ' ' . $returnType;
     }
-
-
 }
