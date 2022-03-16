@@ -25,7 +25,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="/phpunit/.phpunit.cache"
+    <coverage cacheDirectory="./phpunit/.phpunit.cache"
               processUncoveredFiles="false"
               pathCoverage="true"
               disableCodeCoverageIgnore="true"
