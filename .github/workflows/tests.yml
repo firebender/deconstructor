@@ -66,16 +66,13 @@ jobs:
             - name: PHPStan Level 9
               run: vendor/bin/phpstan analyze ./src ./tests --level=9
 
-            - name: Execute tests
-              run: vendor/bin/phpunit --verbose
-              env:
-                DB_PORT: ${{ job.services.mysql.ports[3306] }}
-                DB_USERNAME: root
+            - name: PHPUnit with Coverage
+              run: XDEBUG_MODE=coverage vendor/bin/phpunit --debug
 
-            - name: Run composer update
-              run: composer update -n --prefer-dist --optimize-autoloader
-              env:
-                APP_ENV: testing
+            # - name: Run composer update
+            #   run: composer update -n --prefer-dist --optimize-autoloader
+            #   env:
+            #     APP_ENV: testing
 
             - name: Store artifacts
               uses: actions/upload-artifact@v2
