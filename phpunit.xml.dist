@@ -6,7 +6,7 @@
     backupStaticAttributes="false"
     beStrictAboutOutputDuringTests="true"
     bootstrap="tests/bootstrap.php"
-    cacheResultFile="phpunit/.phpunit.cache"
+    cacheResultFile="phpunit/cache/.phpunit.cache"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
@@ -25,7 +25,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="./phpunit/.phpunit.cache"
+    <coverage cacheDirectory="phpunit/cache"
               processUncoveredFiles="false"
               pathCoverage="true"
               disableCodeCoverageIgnore="true"
