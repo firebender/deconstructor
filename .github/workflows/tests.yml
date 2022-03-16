@@ -76,5 +76,5 @@ jobs:
               with:
                 clover_report_path: phpunit/coverage/clover.xml
                 min_coverage_percent: 100
-                fail_build_on_under: true
+                fail_build_on_under: false
 
