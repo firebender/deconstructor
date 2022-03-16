@@ -45,9 +45,6 @@ jobs:
         #         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
             - name: Setup PHP
               id: settup-php
               uses: shivammathur/setup-php@verbose
@@ -57,6 +54,9 @@ jobs:
                 ini-file: development
                 ini-values: error_reporting=E_ALL
                 tools: composer:v2
+
+            - name: Checkout code
+              uses: actions/checkout@v3
 
             - name: Install dependencies
               uses: nick-invision/retry@v1
@@ -71,17 +71,10 @@ jobs:
             - name: PHPUnit with Coverage
               run: XDEBUG_MODE=coverage vendor/bin/phpunit --debug
 
-            # - name: Run composer update
-            #   run: composer update -n --prefer-dist --optimize-autoloader
-            #   env:
-            #     APP_ENV: testing
-
-            - name: Store artifacts
-              uses: actions/upload-artifact@v2
+            - name: Code Coverage Check
+              uses: sourcetoad/phpunit-coverage-action@v1
               with:
-                name: logs
-                path: |
-                    vendor/orchestra/testbench-core/laravel/storage/logs
-                    !vendor/**/.gitignore
-
+                clover_report_path: phpunit/coverage/clover.xml
+                min_coverage_percent: 100
+                fail_build_on_under: true
 
