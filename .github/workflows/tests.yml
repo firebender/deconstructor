@@ -34,27 +34,29 @@ jobs:
         name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
         continue-on-error: ${{ matrix.php == '8.1' }}
 
-        services:
-            mysql:
-                image: mysql:8
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: yes
-                    MYSQL_DATABASE: forge
-                ports:
-                    - 33306:3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        # services:
+        #     mysql:
+        #         image: mysql:8
+        #         env:
+        #             MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        #             MYSQL_DATABASE: forge
+        #         ports:
+        #             - 33306:3306
+        #         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
             - name: Setup PHP
+              id: settup-php
               uses: shivammathur/setup-php@verbose
               with:
                 php-version: ${{ matrix.php }}
+                extensions: xdebug
+                ini-file: development
                 ini-values: error_reporting=E_ALL
                 tools: composer:v2
-                coverage: none
+
+            - name: Checkout code
+              uses: actions/checkout@v3
 
             - name: Install dependencies
               uses: nick-invision/retry@v1
@@ -66,23 +68,13 @@ jobs:
             - name: PHPStan Level 9
               run: vendor/bin/phpstan analyze ./src ./tests --level=9
 
-            - name: Execute tests
-              run: vendor/bin/phpunit --verbose
-              env:
-                DB_PORT: ${{ job.services.mysql.ports[3306] }}
-                DB_USERNAME: root
+            - name: PHPUnit with Coverage
+              run: XDEBUG_MODE=coverage vendor/bin/phpunit --debug
 
-            - name: Run composer update
-              run: composer update -n --prefer-dist --optimize-autoloader
-              env:
-                APP_ENV: testing
-
-            - name: Store artifacts
-              uses: actions/upload-artifact@v2
+            - name: Code Coverage Check
+              uses: sourcetoad/phpunit-coverage-action@v1
               with:
-                name: logs
-                path: |
-                    vendor/orchestra/testbench-core/laravel/storage/logs
-                    !vendor/**/.gitignore
-
+                clover_report_path: phpunit/coverage/clover.xml
+                min_coverage_percent: 100
+                fail_build_on_under: false
 
